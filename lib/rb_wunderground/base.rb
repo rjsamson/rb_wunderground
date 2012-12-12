@@ -4,8 +4,8 @@ require 'hashie'
 
 module RbWunderground
   class Base
-    FEATURES = %w[conditions forecast forecast10day almanac hourly hourly10day alerts astronomy
-                  tide yesterday currenthurricaine geolookup rawtide webcams]
+    FEATURES = %w[alerts almanac astronomy conditions currenthurricaine forecast forecast10day
+                  geolookup hourly hourly10day rawtide tide webcams yesterday]
 
     attr_reader :api_key
     attr_reader :format
@@ -21,17 +21,25 @@ module RbWunderground
 
     FEATURES.each do |name|
       define_method(name) do |arg|
-        url = ""
-        url << base_url << name << "/q/" << arg << format
+        url = build_url([name], arg)
         fetch_result(url)
       end
     end
 
-    def method_missing(name, *args, &block)
+    def method_missing(meth, *args, &block)
+      name = meth.to_s
       if name =~ /^history_(.+)$/ || name =~ /^planner_(.+)$/
-        url = ""
-        url << base_url << name.to_s << "/q/" << args[0] << format
+        url = build_url([name], args[0])
         fetch_result(url)
+      elsif name.scan("_and_").any?
+        list = name.split("_and_").reject { |n| n=~ /^history_(.+)$/ || n =~ /^planner_(.+)$/ }
+        if list & FEATURES == list
+          features = name.split("_and_")
+          url = build_url(features, args[0])
+          fetch_result(url)
+        else
+          super
+        end
       else
         super
       end
@@ -42,6 +50,15 @@ module RbWunderground
       Hashie::Mash.new(JSON.parse(response.body))
     end
     private :fetch_result
+
+    def build_url(features, arg)
+      url = ""
+      url << base_url
+      features.each { |f| url << f << '/' }
+      url << 'q/' << arg << format
+      url
+    end
+    private :build_url
 
   end
 
