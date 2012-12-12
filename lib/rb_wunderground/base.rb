@@ -20,14 +20,16 @@ module RbWunderground
 
     FEATURES.each do |name|
       define_method(name) do |arg|
-        url = base_url + name + "/q/" + arg + format
+        url = ""
+        url << base_url << name << "/q/" << arg << format
         fetch_result(url)
       end
     end
 
     def method_missing(name, *args, &block)
       if name =~ /^history_(.+)$/ || name =~ /^planner_(.+)$/
-        url = base_url + name.to_s + "/q/" + args[0] + format
+        url = ""
+        url << base_url << name.to_s << "/q/" << args[0] << format
         fetch_result(url)
       else
         super
