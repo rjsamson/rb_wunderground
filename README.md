@@ -2,7 +2,7 @@
 
 A simple wrapper for the Weather Underground API that returns a Hashie::Mash for convenience.
 
-TODO: Write more tests, add ability to search multiple features in one query.
+TODO: Write more tests
 
 ## Installation
 
@@ -60,7 +60,16 @@ forecast = w.forecast('England/London')
 forecast = w.forecast('KALB')
 # Historical info for a date
 history = w.history('12207')
+```
 
+rb_wunderground also supports multiple queries in a single method call - just string together multiple features with '_and_'. For example:
+
+```ruby
+w = RbWundergound::Base.new('API_KEY')
+# Get forecast and hourly forecast for a zip code
+forecast = w.forecast_and_hourly('12186')
+# Get hourly forecast and weather yesterday along with current conditions for a US city
+forecast = w.hourly_and_yesterday_and_conditions("NY/Albany")
 ```
 
 ## Contributing
