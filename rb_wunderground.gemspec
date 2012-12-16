@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency "json", "~> 1.7"
   gem.add_runtime_dependency "httparty", "~> 0.9"
+  gem.add_runtime_dependency "hashie", "~> 1.2"
   gem.add_development_dependency "rspec"
   gem.add_development_dependency 'webmock'
 
