@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["rjsamson@me.com"]
   gem.description   = %q{A simple wrapper for the Weather Underground JSON API}
   gem.summary       = %q{A simple wrapper for the Weather Underground JSON API}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/rjsamson/rb_wunderground"
 
   gem.add_runtime_dependency "json", "~> 1.7"
   gem.add_runtime_dependency "httparty", "~> 0.9"
